@@ -69,29 +69,29 @@ namespace MyPropertyAPI.Controllers
 
             return _buyApartment.GetApartmentDetails(id,userId);
 		}
-/*        [Authorize(Policy = "User")]
-*/        [HttpGet]
+		[Authorize(Policy = "User")]
+		[HttpGet]
 		[Route("/allfavorites")]
 		public async Task<ActionResult<List<ApartmentList>>> GetAddedToFavorite()
 		{
-			//var user = await UserManagerFromPackage.GetUserAsync(User);
+			var user = await UserManagerFromPackage.GetUserAsync(User);
 			string _id = "1";
 
-			//_id= user.Id;
-            var FavApart = _buyApartment.GetAddedToFavorite(_id);
+			_id = user.Id;
+			var FavApart = _buyApartment.GetAddedToFavorite(_id);
 			return FavApart.ToList();
 
 
 		}
-/*        [Authorize(Policy = "User")]*/
-        [HttpPost]
+		[Authorize(Policy = "User")]
+		[HttpPost]
 		[Route("/addtofavorite/{apartId}")]
 		public async Task<ActionResult<ApartmentDetails>> AddToFavorite(int apartId)
 		{
 			string userId = "1";
-			//var user = await UserManagerFromPackage.GetUserAsync(User);
-			//userId= user.Id;
-            _buyApartment.AddToFavorite(userId, apartId);
+			var user = await UserManagerFromPackage.GetUserAsync(User);
+			userId = user.Id;
+			_buyApartment.AddToFavorite(userId, apartId);
 			return Ok();
 		}
         [HttpDelete]
@@ -99,20 +99,20 @@ namespace MyPropertyAPI.Controllers
         public async Task<ActionResult<ApartmentDetails>> RemoveFromFavorite(int apartId)
         {
             string userId = "1";
-			//var user = await UserManagerFromPackage.GetUserAsync(User);
-			//userId= user.Id;
+			var user = await UserManagerFromPackage.GetUserAsync(User);
+			userId = user.Id;
 			_buyApartment.RemoveFromFavorite(userId, apartId);
             return Ok();
         }
-        /*        [Authorize(Policy = "User")]*/
-        [HttpGet]
+		[Authorize(Policy = "User")]
+		[HttpGet]
 		[Route("/getuserapartment/")]
 		public async  Task<ActionResult<List<ApartmentList>>> GetAllUserApartments()
 		{
-            //var user = await UserManagerFromPackage.GetUserAsync(User);
-            string id = "2";
-            //id= user.Id;
-            var UserApart = _buyApartment.GetAllUserApartments(id);
+			var user = await UserManagerFromPackage.GetUserAsync(User);
+			string id = "2";
+			id = user.Id;
+			var UserApart = _buyApartment.GetAllUserApartments(id);
 			if (UserApart == null)
 			{
 				return BadRequest();
@@ -123,7 +123,7 @@ namespace MyPropertyAPI.Controllers
 		}
 
     
-    [HttpGet]
+		[HttpGet]
         [Route("/search/{page}/{CountPerPage}")]
         public async Task<ActionResult<ApartmentListPaginationDto>> Search(int page, int CountPerPage, string City, string Address, int minArea, int maxArea , int minPrice, int maxPrice, string type)
         {
@@ -140,21 +140,21 @@ namespace MyPropertyAPI.Controllers
         }
 
 
-/*        [Authorize(Policy = "Broker")]*/
-        [HttpGet]
+		[Authorize(Policy = "Broker")]
+		[HttpGet]
         [Route("/getBrokerApartment")]
         public async Task<ActionResult<List<ApartmentList>>> GetBrokerApartment()
         {
             string brokerId = "1";
-			//var user = await UserManagerFromPackage.GetUserAsync(User);
-			//brokerId = user.Id;
+			var user = await UserManagerFromPackage.GetUserAsync(User);
+			brokerId = user.Id;
 			var list = await _buyApartment.GetAppartmentsOfBroker(brokerId);
 
             return list.ToList();
 
         }
-/*        [Authorize(Policy = "Admin")]
-        [Authorize(Policy = "Broker")]*/
+
+        [Authorize(Policy = "AdminOrBroker")]    
         [HttpPost]
         [Route("/sellAppartement")]
         public  ActionResult SoldAppartement(SoldAppartementDto soldAppartement)
@@ -169,9 +169,8 @@ namespace MyPropertyAPI.Controllers
 				return BadRequest("Appartement Not Exist");
 			}
 
-		}
-/*        [Authorize(Policy = "Admin")]
-		[Authorize(Policy = "Broker")]*/
+        }
+        [Authorize(Policy = "AdminOrBroker")]
         [HttpDelete]
         [Route("/DeleteAppartement/{Id}")]
         public ActionResult DeleteAppartement(int Id)

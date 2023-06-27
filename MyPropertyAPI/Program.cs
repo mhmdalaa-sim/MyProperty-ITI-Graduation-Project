@@ -108,6 +108,8 @@ namespace MyPropertyAPI
 
                 options.AddPolicy("Broker", policy => policy
                 .RequireClaim(ClaimTypes.Role, "Broker"));
+                options.AddPolicy("AdminOrBroker", policy =>
+                policy.RequireRole("Admin", "Broker"));
 
 
             });

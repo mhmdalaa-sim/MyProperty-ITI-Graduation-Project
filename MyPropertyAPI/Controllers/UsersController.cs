@@ -28,17 +28,17 @@ namespace MyPropertyAPI.Controllers
             _configuration = configuration;
         }
 
-/*        [Authorize(Policy = "User")]
-*/        [HttpPost]
+        [Authorize(Policy = "User")]
+        [HttpPost]
         [Route("AddAppartement")]
         public async Task<ActionResult> AddAppartement(SellingAppartementDto NewAppartement)
         {
             //will be modified
 
-            //var user = await UserManagerFromPackage.GetUserAsync(User);
-            //NewAppartement.UserId = user.Id;
+            var user = await UserManagerFromPackage.GetUserAsync(User);
+            NewAppartement.UserId = user.Id;
 
-            NewAppartement.UserId = "2";
+   /*         NewAppartement.UserId = "2";*/
 
             _UsersManger.AddAppartement(NewAppartement);
 

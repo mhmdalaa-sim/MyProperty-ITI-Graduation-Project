@@ -1,19 +1,22 @@
 ﻿using BL.Dtos.PendingProperty;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MyPropertyAPI.Controllers
 {
-/*    [Authorize(Policy = "Admin")]
-*/    [Route("api/[controller]")]
+    [Authorize(Policy = "Admin")]
+    [Route("api/[controller]")]
     [ApiController]
     public class PendingController : ControllerBase
     {
         private readonly IPendingPropertyManager _pendingPropertyManager;
-        public PendingController( IPendingPropertyManager pendingPropertyManager )
+        private readonly UserManager<IdentityUser> UserManagerFromPackage;
+        public PendingController( IPendingPropertyManager pendingPropertyManager , UserManager<IdentityUser> usermanger)
         {
             _pendingPropertyManager = pendingPropertyManager;
+            UserManagerFromPackage = usermanger;
         }
         [HttpGet]
         public ActionResult<List<PendingReadDto>> GetAll() { 
@@ -45,9 +48,10 @@ namespace MyPropertyAPI.Controllers
         }
         [HttpPatch]
         [Route("{id}")]
-        public ActionResult Accept(int id, string brokerId)
+        public async Task< ActionResult >Accept(int id, string brokerId)
         {
-            string managerId = "3";
+            var user = await UserManagerFromPackage.GetUserAsync(User);
+            string managerId = user.Id;
           var apartment= _pendingPropertyManager.Accept(id, brokerId, managerId);
             if (apartment == null) { return BadRequest(); }
 

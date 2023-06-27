@@ -103,6 +103,8 @@ namespace BL.Mangers
 				MaxPrice = ApartmentDB.MaxPrice,
 				BrokerPhone = ApartmentDB.Broker.PhoneNumber,
 				BrokerEmail = ApartmentDB.Broker.Email,
+				ownerEmail=ApartmentDB.User.Email,
+				ownerPhone = ApartmentDB.User.PhoneNumber,
 				Type = ApartmentDB.Type,
 				ViewsCount = ApartmentDB.ViewsCounter.Value,
 				Code= ApartmentDB.Code,

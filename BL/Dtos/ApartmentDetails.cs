@@ -14,6 +14,8 @@ namespace BL.Dtos
         public string? BrokerPhone { get; set; }
 
         public string? BrokerEmail { get; set; }
+        public string? ownerEmail { get; set; }
+        public string? ownerPhone { get; set; }
 
         public int? MaxPrice { get; set; }
 
